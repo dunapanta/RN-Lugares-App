@@ -8,3 +8,49 @@ yarn add redux react-redux redux-thunk
 
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+
+
+238 Camara
+en Expo se puede utilizar Camera (con mas configuraciones) o ImagePicker
+Utilizo ImagePicker porque es simplemente para tomar imagenes 
+
+expo install expo-image-picker
+
+NO necesito añadir mas configuraciones simplemente instalando ya esta para usar
+
+import * as ImagePicker from 'expo-image-picker'
+
+const takeImageHandler = () => {
+        //abrira la camara del dispositivo, esta func retorna un a promesa
+        ImagePicker.launchCameraAsync()
+    }
+
+En android pide permiso para usar la camara esto ya lo hace expo por atras
+en ios da un warning porq los permisos funcionan diferente en ios y se tiene que pedir al usuario permiso
+
+de nuevo para pedir permiso se utiliza otro paquete de expo Permissions
+
+expo install expo-permissions
+
+const verifyPermissions = async () => {
+        const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL)
+        // para la galeria el permiso es CAMERA_ROLL
+
+        if(result.status !== 'granted'){
+            //Si el usuario declino el permiso
+            Alert.alert('Permiso denegado', 'Debe otorgar permisos de cámara para usar esta función', 
+            [{text: 'Aceptar'}])
+            return false
+        }
+        return true
+    }
+
+const takeImageHandler = async () => {
+        //permiso de camara
+        const hasPermission = await verifyPermissions()
+        if(!hasPermission){
+            return
+        }
+        //abrira la camara del dispositivo, esta func retorna un a promesa
+        ImagePicker.launchCameraAsync()
+    }
