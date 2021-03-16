@@ -1,0 +1,8 @@
+yarn add react-navigation
+yarn add react-navigation-stack
+yarn add react-native-reanimated react-native-gesture-handler
+yarn add react-navigation-header-buttons
+yarn add @expo/vector-icons
+
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
