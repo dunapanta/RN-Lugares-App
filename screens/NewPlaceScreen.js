@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
 import { ScrollView, View, Text, Button, TextInput, StyleSheet } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 import Colors from '../constants/Colors'
+import * as placesActions from '../store/actions/places'
 
-const NewPlaceScreen = () => {
+const NewPlaceScreen = ({ navigation }) => {
     const [title, setTitle] = useState('')
+
+    const dispatch = useDispatch()
 
     const titleChangeHandler = text => {
         setTitle(text)
     }
 
     const savePlaceHandler = () => {
-
+        dispatch(placesActions.addPlace(title))
+        navigation.goBack()
     }
 
 
