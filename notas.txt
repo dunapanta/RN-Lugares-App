@@ -54,3 +54,10 @@ const takeImageHandler = async () => {
         //abrira la camara del dispositivo, esta func retorna un a promesa
         ImagePicker.launchCameraAsync()
     }
+
+
+241 Almacenar Imagen en FileSystem
+
+expo install expo-file-system
+
+se implementa en action
