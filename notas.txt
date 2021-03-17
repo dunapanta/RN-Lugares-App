@@ -162,3 +162,7 @@ export const insertPlace  = (title, imagaUri, address, lat, lng) => {
     })
     return promise
 }
+
+246 Instalar Location
+expo install expo-location
+se implementa en LocationPicker

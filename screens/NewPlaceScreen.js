@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import Colors from '../constants/Colors'
 import * as placesActions from '../store/actions/places'
 import ImgPicker from '../components/ImgPicker'
+import LocationPicker from '../components/LocationPicker'
 
 const NewPlaceScreen = ({ navigation }) => {
     const [title, setTitle] = useState('')
@@ -36,6 +37,7 @@ const NewPlaceScreen = ({ navigation }) => {
                     value={title}
                 />
                 <ImgPicker onImageTaken={imageTakenHandler} />
+                <LocationPicker />
                 <Button 
                     title='Guardar Lugar'
                     color={Colors.primary}
@@ -55,8 +57,9 @@ const styles = StyleSheet.create({
         margin: 30
     },
     label:{
-        fontSize: 18,
-        marginBottom: 15
+        fontSize: 20,
+        marginBottom: 10,
+        color: Colors.secondary
     },
     textInput:{
       borderBottomColor: '#ccc',
