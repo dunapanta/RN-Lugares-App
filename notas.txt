@@ -166,3 +166,15 @@ export const insertPlace  = (title, imagaUri, address, lat, lng) => {
 246 Instalar Location
 expo install expo-location
 se implementa en LocationPicker
+
+245 Map Preview
+Una imagen estatica como un snapshot del mapa
+
+https://developers.google.com/maps/documentation/maps-static/overview
+
+se necesita tener API_KEY
+
+https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap
+&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318
+&markers=color:red%7Clabel:C%7C40.718217,-73.998284
+&key=YOUR_API_KEY
