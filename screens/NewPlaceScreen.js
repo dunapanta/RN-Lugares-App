@@ -8,6 +8,7 @@ import ImgPicker from '../components/ImgPicker'
 
 const NewPlaceScreen = ({ navigation }) => {
     const [title, setTitle] = useState('')
+    const [selectedImage, setSelectedImage] = useState()
 
     const dispatch = useDispatch()
 
@@ -15,8 +16,12 @@ const NewPlaceScreen = ({ navigation }) => {
         setTitle(text)
     }
 
+    const imageTakenHandler = imagePath => {
+        setSelectedImage(imagePath)
+    }
+
     const savePlaceHandler = () => {
-        dispatch(placesActions.addPlace(title))
+        dispatch(placesActions.addPlace(title, selectedImage))
         navigation.goBack()
     }
 
@@ -30,7 +35,7 @@ const NewPlaceScreen = ({ navigation }) => {
                     onChangeText={titleChangeHandler}
                     value={title}
                 />
-                <ImgPicker />
+                <ImgPicker onImageTaken={imageTakenHandler} />
                 <Button 
                     title='Guardar Lugar'
                     color={Colors.primary}

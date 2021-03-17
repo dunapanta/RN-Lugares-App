@@ -10,7 +10,8 @@ export default (state = initialState, action) => {
         case ADD_PLACE:
             const newPlace = new Place(
                 new Date().toString(),
-                action.placeData.title
+                action.placeData.title,
+                action.placeData.image
             )
             return {
                 ...state,

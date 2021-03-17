@@ -15,7 +15,7 @@ const PlacesListScreen = ({ navigation }) => {
             keyExtractor={item => item.id}
             renderItem={ItemData => (
                 <PlaceItem 
-                    image={null}
+                    image={ItemData.item.imageUri}
                     title={ItemData.item.title}
                     address={null}
                     onSelect={ () => {
