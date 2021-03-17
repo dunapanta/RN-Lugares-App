@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Button, Text, Image, StyleSheet, Alert } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import * as Permissions from 'expo-permissions'
@@ -6,6 +6,7 @@ import * as Permissions from 'expo-permissions'
 import Colors from '../constants/Colors'
 
 const ImgPicker = () => {
+    const [pickedImage, setPickedImage] = useState()
 
     //Si el usuario ya acepto o declino los permisos no se vuelve a mostrar esto de permisos otra vez retorna lo que ya obtuvo antes
     const verifyPermissions = async () => {
@@ -27,15 +28,26 @@ const ImgPicker = () => {
         if(!hasPermission){
             return
         }
-        //abrira la camara del dispositivo, esta func retorna un a promesa
-        ImagePicker.launchCameraAsync()
+        //abrira l camara del dispositivo, esta func retorna un a promesa
+        const image = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: 0.5 // de 0 a 1
+        })
+
+        //console.log(image)
+        setPickedImage(image.uri)
     }
 
     return (
         <View style={styles.imagePicker}>
             <View style={styles.imagePreview}>
-                <Text style={styles.text}>Aún no se han agregado imagenes</Text>
-                <Image style={styles.image}/>
+                {!pickedImage 
+                ? <Text style={styles.text}>Aún no se han agregado imagenes</Text>
+                : <Image 
+                    style={styles.image}
+                    source={{uri: pickedImage}}
+                />}
             </View>
             <Button 
                     title="Tomar Imagen"
