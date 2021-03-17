@@ -61,3 +61,80 @@ const takeImageHandler = async () => {
 expo install expo-file-system
 
 se implementa en action
+
+import * as FileSystem from 'expo-file-system'
+
+export const ADD_PLACE = 'ADD_PLACE'
+
+export const addPlace = (title, image) => {
+    return async dispatch => {
+        // el path necesita incluir el nombre del archivo que se usara en el futuro
+        const fileName = image.split('/').pop()
+        // documentDirectory is the main directory, if the user uninstall the app the folder also  will be erase
+        const newPath = FileSystem.documentDirectory + fileName
+        try{
+            // move a file from a to b
+            await FileSystem.moveAsync({
+                from: image, //the path temporary directory that expo provides
+                to: newPath
+            })
+        }catch(err){
+            console.log(err)
+            throw err
+        }
+
+        dispatch({
+            type: ADD_PLACE,
+            placeData: {
+                title: title,
+                image: newPath
+            }
+        })
+    }
+}
+
+
+243 SQLite
+
+expo install expo-sqlite
+
+se necesita abrir una conexion a la bd si no existe la bd la crea
+
+import * as SQLite from 'expo-sqlite';
+
+import * as SQLite from 'expo-sqlite';
+
+//El código se ejecuta cuando importamos este archivo 
+const db = SQLite.openDatabase('places.db')
+
+export const init = () => {
+    const promise = new Promise((resolve, reject) => {
+        // crear tablas
+        db.transaction( (tx) => {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, lat REAL NOT NULL, lng REAL NOT NULL);', 
+            [],
+            () => {
+                //success function
+                resolve()
+            },
+            (_, err) => {
+                // error function
+                reject(err)
+            }
+            )
+        })
+    })
+    return promise
+}
+
+
+en APP JS
+
+import { init } from './helpers/db'
+
+init().then( () => {
+  console.log('Initialized database')
+}).catch(err => {
+  console.log('Initialized database failed')
+  console.log(err)
+})
