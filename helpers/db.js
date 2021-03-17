@@ -45,3 +45,26 @@ export const insertPlace  = (title, imagaUri, address, lat, lng) => {
     })
     return promise
 }
+
+//Fetch data
+export const fetchPlaces = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction( (tx) => {
+            tx.executeSql(
+                //no se debe utilizar templete string porque se podria dar sql injection ej en vez de title ingresan un comando sql
+                // por eso se usa ?
+                'SELECT * FROM places', 
+                [],
+                (_, result) => {
+                    //success function
+                    resolve(result)
+                },
+                (_, err) => {
+                    // error function
+                    reject(err)
+                }
+                )
+        })
+    })
+    return promise
+}
