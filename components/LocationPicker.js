@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions'
 import Colors from '../constants/Colors'
 import MapPreview from '../components/MapPreview'
 
-const LocationPicker = () => {
+const LocationPicker = ({ navigation }) => {
     const [isFetching, setIsFetching] = useState(false)
     const [pickedLocation, setPickedLocation] = useState()
 
@@ -49,19 +49,30 @@ const LocationPicker = () => {
         setIsFetching(false)
     }
 
+    const pickOnMapHandler = () => {
+        navigation.navigate('Map')
+    }
+
     return (
         <View style={styles.locationPicker}>
-            <MapPreview style={styles.mapPreview} location={pickedLocation}>
+            <MapPreview style={styles.mapPreview} location={pickedLocation} onPress={pickOnMapHandler}>
                 { isFetching 
                     ? <ActivityIndicator size='large' color={Colors.secondary}/>
                     : <Text style={styles.text}>Aún no se ha selecionado la locación</Text>
                 }
             </MapPreview>
-            <Button 
-                title="Obtener la Ubicación del Usuario"
-                color={Colors.primary}
-                onPress={getLocationHandler}
-            />
+            <View style={styles.actions}>
+                <Button 
+                    title="Obtener Ubicación"
+                    color={Colors.primary}
+                    onPress={getLocationHandler}
+                />
+                <Button 
+                    title="Ver en Mapa"
+                    color={Colors.primary}
+                    onPress={pickOnMapHandler}
+                />
+            </View>
         </View>
     )
 }
@@ -80,6 +91,11 @@ const styles = StyleSheet.create({
     text:{
         fontSize: 16,
         color: Colors.secondary
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%'
     }
 })
 

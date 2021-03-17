@@ -37,7 +37,7 @@ const NewPlaceScreen = ({ navigation }) => {
                     value={title}
                 />
                 <ImgPicker onImageTaken={imageTakenHandler} />
-                <LocationPicker />
+                <LocationPicker navigation={navigation}/>
                 <Button 
                     title='Guardar Lugar'
                     color={Colors.primary}
