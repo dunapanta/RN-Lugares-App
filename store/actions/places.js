@@ -1,12 +1,26 @@
 import * as FileSystem from 'expo-file-system'
 
 import { insertPlace, fetchPlaces } from '../../helpers/db'
+import ENV from '../../env'
 
 export const ADD_PLACE = 'ADD_PLACE'
 export const SET_PLACES = 'SET_PLACES'
 
-export const addPlace = (title, image) => {
+export const addPlace = (title, image, location) => {
     return async dispatch => {
+        // reverse geocoding
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`)
+        if(!response.ok){
+            throw new Error('Algo ha salido mal')
+        }
+
+        const resData = await response.json()
+        //console.log(resData)
+        if(!response.results){
+            throw new Error('Algo ha salido mal')
+        }
+        const adrress = resData.results[0].formatted_address
+
         // el path necesita incluir el nombre del archivo que se usara en el futuro
         const fileName = image.split('/').pop()
         // documentDirectory is the main directory, if the user uninstall the app the folder also  will be erase
@@ -20,9 +34,9 @@ export const addPlace = (title, image) => {
             const dbResult = await insertPlace(
                 title, 
                 newPath, 
-                'Dummy addres', 
-                7.8, 
-                4.6
+                adrress, 
+                location.lat, 
+                location.lng
                 )
             console.log(dbResult)
             dispatch({
@@ -30,7 +44,12 @@ export const addPlace = (title, image) => {
                 placeData: {
                     id: dbResult.insertId,
                     title: title,
-                    image: newPath
+                    image: newPath,
+                    address,
+                    coords:{
+                        lat: location.lat, 
+                        lng: location.lng
+                    }
                 }
             })
         }catch(err){

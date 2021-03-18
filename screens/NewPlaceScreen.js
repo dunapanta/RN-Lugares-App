@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { ScrollView, View, Text, Button, TextInput, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -10,6 +10,7 @@ import LocationPicker from '../components/LocationPicker'
 const NewPlaceScreen = ({ navigation }) => {
     const [title, setTitle] = useState('')
     const [selectedImage, setSelectedImage] = useState()
+    const [selectedLocation, setSelectedLocation] = useState()
 
     const dispatch = useDispatch()
 
@@ -21,8 +22,13 @@ const NewPlaceScreen = ({ navigation }) => {
         setSelectedImage(imagePath)
     }
 
+    const locationPickedHandler = useCallback(location => {
+        //console.log('LOCACION',location)
+        setSelectedLocation(location)
+    }, [])
+
     const savePlaceHandler = () => {
-        dispatch(placesActions.addPlace(title, selectedImage))
+        dispatch(placesActions.addPlace(title, selectedImage, selectedLocation))
         navigation.goBack()
     }
 
@@ -36,8 +42,8 @@ const NewPlaceScreen = ({ navigation }) => {
                     onChangeText={titleChangeHandler}
                     value={title}
                 />
-                <ImgPicker onImageTaken={imageTakenHandler} />
-                <LocationPicker navigation={navigation}/>
+                <ImgPicker onImageTaken={imageTakenHandler}/>
+                <LocationPicker navigation={navigation} onLocationPicked={locationPickedHandler}/>
                 <Button 
                     title='Guardar Lugar'
                     color={Colors.primary}
