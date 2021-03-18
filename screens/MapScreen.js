@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 
-const MapScreen = () => {
+import Colors from '../constants/Colors'
+
+const MapScreen = ({ navigation }) => {
     const [selectedLocation, setSelectedLocation] = useState()
 
     const mapRegion ={
@@ -19,6 +21,24 @@ const MapScreen = () => {
             lng: event.nativeEvent.coordinate.longitude
         })
     }
+
+    const savePickedLocationHandler = useCallback(() => {
+        if(!selectedLocation){
+            Alert.alert('Locación No Seleccionada', 'Debe seleccionar en el mapa para guardar la locación', 
+            [{text: 'Aceptar'}])
+            return
+        }
+        //En vez de goBack se utiliza la misma forma de navegar y no importa la pila de navegacion no se pone adelante de la que venimos
+        navigation.navigate('NewPlace', {
+           pickedLocation: selectedLocation
+        })
+    }, [selectedLocation])
+
+    useEffect( () => {
+        navigation.setParams({
+            saveLocation: savePickedLocationHandler
+        })
+    }, [savePickedLocationHandler])
 
     let markerCoordinates
 
@@ -40,9 +60,29 @@ const MapScreen = () => {
     )
 }
 
+MapScreen.navigationOptions = navData => {
+
+    const saveFn = navData.navigation.getParam('saveLocation')
+    return {
+        headerTitle: "Mapa",
+        headerRight: () => (
+                        <TouchableOpacity style={styles.headerButton} onPress={saveFn}>
+                            <Text style={styles.headerButtonText}>Guardar</Text>
+                        </TouchableOpacity>
+                        )
+    }  
+}
+
 const styles = StyleSheet.create({
     map:{
         flex: 1
+    },
+    headerButton:{
+        marginHorizontal: 20
+    },
+    headerButtonText:{
+       fontSize: 16,
+       color: Platform.OS === 'android' ? 'white' : Colors.primary
     }
 })
 
