@@ -19,15 +19,15 @@ const PlacesListScreen = ({ navigation }) => {
         <FlatList
             data={places}
             keyExtractor={item => item.id}
-            renderItem={ItemData => (
+            renderItem={itemData => (
                 <PlaceItem 
-                    image={ItemData.item.imageUri}
-                    title={ItemData.item.title}
-                    address={null}
+                    image={itemData.item.imageUri}
+                    title={itemData.item.title}
+                    address={itemData.item.address}
                     onSelect={ () => {
                         navigation.navigate('PlaceDetail', {
-                            placeTitle: ItemData.item.title,
-                            placeId: ItemData.item.id
+                            placeTitle: itemData.item.title,
+                            placeId: itemData.item.id
                         })
                     }}
 

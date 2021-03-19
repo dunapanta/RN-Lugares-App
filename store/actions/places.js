@@ -10,16 +10,18 @@ export const addPlace = (title, image, location) => {
     return async dispatch => {
         // reverse geocoding
         const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${ENV.googleApiKey}`)
+        
         if(!response.ok){
             throw new Error('Algo ha salido mal')
         }
 
         const resData = await response.json()
-        //console.log(resData)
-        if(!response.results){
+        
+        if(!resData.results){
             throw new Error('Algo ha salido mal')
         }
-        const adrress = resData.results[0].formatted_address
+        const address = resData.results[0].formatted_address
+        
 
         // el path necesita incluir el nombre del archivo que se usara en el futuro
         const fileName = image.split('/').pop()
@@ -34,7 +36,7 @@ export const addPlace = (title, image, location) => {
             const dbResult = await insertPlace(
                 title, 
                 newPath, 
-                adrress, 
+                address, 
                 location.lat, 
                 location.lng
                 )
